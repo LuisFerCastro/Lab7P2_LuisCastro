@@ -12,6 +12,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Load Files"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmi_LoadFActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jmiPP_refresh">
           <Properties>
@@ -66,11 +69,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Command Line"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmi_clearCMDLActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jmi_clearTable">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Clear Table"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmi_clearTableActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

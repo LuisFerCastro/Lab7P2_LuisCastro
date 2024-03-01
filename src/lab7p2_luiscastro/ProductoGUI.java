@@ -7,6 +7,8 @@ package lab7p2_luiscastro;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -55,6 +57,11 @@ public class ProductoGUI extends javax.swing.JFrame {
         jmi_Commands = new javax.swing.JMenuItem();
 
         jmi_LoadF.setText("Load Files");
+        jmi_LoadF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_LoadFActionPerformed(evt);
+            }
+        });
         pp_archivos.add(jmi_LoadF);
 
         jmiPP_refresh.setText("Refresh Tree");
@@ -133,9 +140,19 @@ public class ProductoGUI extends javax.swing.JFrame {
         m_clear.setText("Clear");
 
         jmi_clearCMDL.setText("Clear Command Line");
+        jmi_clearCMDL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_clearCMDLActionPerformed(evt);
+            }
+        });
         m_clear.add(jmi_clearCMDL);
 
         jmi_clearTable.setText("Clear Table");
+        jmi_clearTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_clearTableActionPerformed(evt);
+            }
+        });
         m_clear.add(jmi_clearTable);
 
         m_window.add(m_clear);
@@ -213,44 +230,46 @@ public class ProductoGUI extends javax.swing.JFrame {
         boolean vcomando= false;
         if(comando.contains("./load")){
             nom_archivo = obtenerNombreArchivo(comando, nom_archivo);
-            AdmProducto am = new AdmProducto(nom_archivo+".txt");
-            if (am.archivo.exists()) {
-                am.cargarArchivo();
-                DefaultTableModel m = (DefaultTableModel)jtable_productos.getModel();
-                m.setRowCount(0);
-                for (Producto p : am.getProductos()) {
-                    System.out.println(p);
-                    Object[]row = {p.getId(),
-                        p.getNombre(),
-                        p.getCategory(),
-                        p.getPrecio(),
-                        p.getAisle(),
-                        p.getBin()};                   
-                m.addRow(row);
-                }
-                
-                jtable_productos.setModel(m);
-            }else{
-                JOptionPane.showMessageDialog(this, "El archivo no existe!");
-            }
+            Load(nom_archivo);
+            
                 
         }else if(comando.contains("./create")){
             nom_archivo = obtenerNombreArchivo(comando, nom_archivo);
             
             
-        }else if(comando.contains("./clear")){
-            if((vcomando = validarComando(comando) == false)){
-                JOptionPane.showMessageDialog(this, "Comando invalido!");
-            }
-        }else if(comando.contains("./refresh")){
-            if((vcomando = validarComando(comando))== false){
-                JOptionPane.showMessageDialog(this, "Comando invalido!");
-            }
+        }else if(comando.equals("./clear")){  
+            DefaultTableModel m =(DefaultTableModel) jtable_productos.getModel();
+            m.setRowCount(0);
+            m.setRowCount(16);
+            jtable_productos.setModel(m);
+            
+        }else if(comando.equals("./refresh")){
+            
         }else{
             JOptionPane.showMessageDialog(this, "Comando invalido!");
         }
         tf_commands.setText("");
     }//GEN-LAST:event_btn_commandsMouseClicked
+
+    private void jmi_LoadFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_LoadFActionPerformed
+        // TODO add your handling code here:
+        DefaultTreeModel m = (DefaultTreeModel) jt_archivos.getModel();
+        DefaultMutableTreeNode r = (DefaultMutableTreeNode) m.getRoot();
+        
+    }//GEN-LAST:event_jmi_LoadFActionPerformed
+
+    private void jmi_clearCMDLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_clearCMDLActionPerformed
+        // TODO add your handling code here:
+        tf_commands.setText("");
+    }//GEN-LAST:event_jmi_clearCMDLActionPerformed
+
+    private void jmi_clearTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_clearTableActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel m =(DefaultTableModel) jtable_productos.getModel();
+            m.setRowCount(0);
+            m.setRowCount(16);
+            jtable_productos.setModel(m);
+    }//GEN-LAST:event_jmi_clearTableActionPerformed
     
    
     public String obtenerNombreArchivo(String comando, String nom_archivo){
@@ -262,14 +281,35 @@ public class ProductoGUI extends javax.swing.JFrame {
             }
        return nom_archivo;
     }
-    public boolean validarComando(String comando){
-        Scanner sc = new Scanner(comando);
-        sc.useDelimiter(" ");
-        if(sc.hasNext()){
-            return false;
+    
+    
+    public void Load(String nom_archivo){
+        AdmProducto am = new AdmProducto(nom_archivo+".txt");
+            if (am.archivo.exists()) {
+                am.cargarArchivo();
+                DefaultTableModel m = (DefaultTableModel)jtable_productos.getModel();
+                m.setRowCount(0);
+                for (Producto p : am.getProductos()) {
+                    Object[]row = {p.getId(),
+                        p.getNombre(),
+                        p.getCategory(),
+                        p.getPrecio(),
+                        p.getAisle(),
+                        p.getBin()};                   
+                m.addRow(row);
+                }
+                
+                jtable_productos.setModel(m);
         }else{
-            return true;
-        }
+             JOptionPane.showMessageDialog(this, "El archivo no existe!");   
+            }
+    }
+    public void crearArchivo(String nom_archivo){
+         DefaultTreeModel m = (DefaultTreeModel)jt_archivos.getModel();
+         DefaultMutableTreeNode root = (DefaultMutableTreeNode)m.getRoot();
+         DefaultTableModel tabla = (DefaultTableModel) jtable_productos.getModel();
+         AdmProducto am = new AdmProducto(nom_archivo+".txt");
+         
     }
     /**
      * @param args the command line arguments
@@ -331,4 +371,5 @@ public class ProductoGUI extends javax.swing.JFrame {
     private javax.swing.JPopupMenu pp_table;
     private javax.swing.JTextField tf_commands;
     // End of variables declaration//GEN-END:variables
+    
 }
