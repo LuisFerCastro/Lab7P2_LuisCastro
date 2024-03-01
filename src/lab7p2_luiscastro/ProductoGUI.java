@@ -4,6 +4,10 @@
  */
 package lab7p2_luiscastro;
 
+import java.util.Scanner;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author lfern
@@ -62,14 +66,38 @@ public class ProductoGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btn_commands.setText("Entrar");
+        btn_commands.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_commandsMouseClicked(evt);
+            }
+        });
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Archivos CVS");
         jt_archivos.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jt_archivos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jt_archivosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jt_archivos);
 
         jtable_productos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
                 "Id", "Name", "Categoria", "Price", "Aisle", "Bin"
@@ -81,6 +109,11 @@ public class ProductoGUI extends javax.swing.JFrame {
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+        });
+        jtable_productos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtable_productosMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(jtable_productos);
@@ -159,6 +192,85 @@ public class ProductoGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jt_archivosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_archivosMouseClicked
+        // TODO add your handling code here:
+       if(evt.getButton()==3){
+           pp_archivos.show(evt.getComponent(), evt.getX(), evt.getY());
+       }
+    }//GEN-LAST:event_jt_archivosMouseClicked
+
+    private void jtable_productosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtable_productosMouseClicked
+        // TODO add your handling code here:
+        if(evt.getButton() == 3){
+            pp_table.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_jtable_productosMouseClicked
+
+    private void btn_commandsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_commandsMouseClicked
+        // TODO add your handling code here:
+        String comando = tf_commands.getText();
+        String nom_archivo = "";
+        boolean vcomando= false;
+        if(comando.contains("./load")){
+            nom_archivo = obtenerNombreArchivo(comando, nom_archivo);
+            AdmProducto am = new AdmProducto(nom_archivo+".txt");
+            if (am.archivo.exists()) {
+                am.cargarArchivo();
+                DefaultTableModel m = (DefaultTableModel)jtable_productos.getModel();
+                m.setRowCount(0);
+                for (Producto p : am.getProductos()) {
+                    System.out.println(p);
+                    Object[]row = {p.getId(),
+                        p.getNombre(),
+                        p.getCategory(),
+                        p.getPrecio(),
+                        p.getAisle(),
+                        p.getBin()};                   
+                m.addRow(row);
+                }
+                
+                jtable_productos.setModel(m);
+            }else{
+                JOptionPane.showMessageDialog(this, "El archivo no existe!");
+            }
+                
+        }else if(comando.contains("./create")){
+            nom_archivo = obtenerNombreArchivo(comando, nom_archivo);
+            
+            
+        }else if(comando.contains("./clear")){
+            if((vcomando = validarComando(comando) == false)){
+                JOptionPane.showMessageDialog(this, "Comando invalido!");
+            }
+        }else if(comando.contains("./refresh")){
+            if((vcomando = validarComando(comando))== false){
+                JOptionPane.showMessageDialog(this, "Comando invalido!");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Comando invalido!");
+        }
+        tf_commands.setText("");
+    }//GEN-LAST:event_btn_commandsMouseClicked
+    
+   
+    public String obtenerNombreArchivo(String comando, String nom_archivo){
+        Scanner sc = new Scanner(comando);
+        sc.useDelimiter(" ");
+        while (sc.hasNext()) {
+                sc.next();
+                nom_archivo = sc.next();   
+            }
+       return nom_archivo;
+    }
+    public boolean validarComando(String comando){
+        Scanner sc = new Scanner(comando);
+        sc.useDelimiter(" ");
+        if(sc.hasNext()){
+            return false;
+        }else{
+            return true;
+        }
+    }
     /**
      * @param args the command line arguments
      */

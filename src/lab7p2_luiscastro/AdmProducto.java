@@ -45,22 +45,29 @@ public class AdmProducto {
     
     public void cargarArchivo(){
         Scanner sc = null;
-        listaProductos = new ArrayList();
-        try {
-            sc = new Scanner(archivo);
-            sc.useDelimiter(",");
-            while (sc.hasNext()) {
-                listaProductos.add(new Producto(sc.nextInt(), 
-                        sc.nextLine(), 
-                        sc.nextInt(), 
-                        sc.nextDouble(), 
-                        sc.nextInt(), 
-                        sc.nextInt()));
-                
+        listaProductos = new ArrayList<>();
+        if(archivo.exists()){
+            try {
+                sc = new Scanner(archivo);
+                sc.useDelimiter(",");
+
+                while (sc.hasNext()) {
+                    listaProductos.add(new Producto(
+                        sc.nextInt(),
+                        sc.next(),
+                        sc.nextInt(),
+                        sc.nextDouble(),
+                        sc.nextInt(),
+                        sc.nextInt()
+                    )       
+                    );
+
+                }
+            } catch (Exception e) {
+
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        
         sc.close();
     }
     
@@ -76,8 +83,7 @@ public class AdmProducto {
                 bw.write(p.getCategory()+",");
                 bw.write(p.getPrecio()+",");
                 bw.write(p.getAisle()+",");
-                bw.write(p.getBin());
-                bw.write("\n");
+                bw.write(p.getBin()+",");
             }
             bw.flush();
         } catch (Exception e) {
