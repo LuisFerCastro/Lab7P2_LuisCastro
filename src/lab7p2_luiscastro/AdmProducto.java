@@ -45,6 +45,7 @@ public class AdmProducto {
     
     public void cargarArchivo(){
         Scanner sc = null;
+        listaProductos = new ArrayList();
         try {
             sc = new Scanner(archivo);
             sc.useDelimiter(",");
@@ -67,7 +68,7 @@ public class AdmProducto {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter(archivo);
+            fw = new FileWriter(archivo,true);
             bw = new BufferedWriter(fw);
             for (Producto p : listaProductos) {
                 bw.write(p.getId()+",");
