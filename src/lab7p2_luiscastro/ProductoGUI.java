@@ -4,7 +4,17 @@
  */
 package lab7p2_luiscastro;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -68,6 +78,11 @@ public class ProductoGUI extends javax.swing.JFrame {
         pp_archivos.add(jmiPP_refresh);
 
         jmipp_clear.setText("Clear Table");
+        jmipp_clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmipp_clearActionPerformed(evt);
+            }
+        });
         pp_table.add(jmipp_clear);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -128,6 +143,11 @@ public class ProductoGUI extends javax.swing.JFrame {
         m_file.setText("File");
 
         jmi_newFile.setText("New File");
+        jmi_newFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_newFileActionPerformed(evt);
+            }
+        });
         m_file.add(jmi_newFile);
 
         jmi_ImportFile.setText("Import File");
@@ -235,7 +255,11 @@ public class ProductoGUI extends javax.swing.JFrame {
                 
         }else if(comando.contains("./create")){
             nom_archivo = obtenerNombreArchivo(comando, nom_archivo);
-            
+            try {
+                crearArchivo(nom_archivo);
+            } catch (IOException ex) {
+                
+            }
             
         }else if(comando.equals("./clear")){  
             DefaultTableModel m =(DefaultTableModel) jtable_productos.getModel();
@@ -256,6 +280,7 @@ public class ProductoGUI extends javax.swing.JFrame {
         DefaultTreeModel m = (DefaultTreeModel) jt_archivos.getModel();
         DefaultMutableTreeNode r = (DefaultMutableTreeNode) m.getRoot();
         
+        
     }//GEN-LAST:event_jmi_LoadFActionPerformed
 
     private void jmi_clearCMDLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_clearCMDLActionPerformed
@@ -270,6 +295,28 @@ public class ProductoGUI extends javax.swing.JFrame {
             m.setRowCount(16);
             jtable_productos.setModel(m);
     }//GEN-LAST:event_jmi_clearTableActionPerformed
+
+    private void jmipp_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmipp_clearActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel m =(DefaultTableModel) jtable_productos.getModel();
+            m.setRowCount(0);
+            m.setRowCount(16);
+            jtable_productos.setModel(m);                        
+    }//GEN-LAST:event_jmipp_clearActionPerformed
+
+    private void jmi_newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_newFileActionPerformed
+        // TODO add your handling code here:
+        JFileChooser jfc = new JFileChooser("./");
+        File seleccionado = null;
+        int seleccion = jfc.showOpenDialog(this);
+        if (seleccion == JFileChooser.APPROVE_OPTION)
+            {
+               seleccionado = jfc.getSelectedFile();
+            
+            }
+
+        LoadFile(seleccionado);
+    }//GEN-LAST:event_jmi_newFileActionPerformed
     
    
     public String obtenerNombreArchivo(String comando, String nom_archivo){
@@ -304,12 +351,56 @@ public class ProductoGUI extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(this, "El archivo no existe!");   
             }
     }
-    public void crearArchivo(String nom_archivo){
-         DefaultTreeModel m = (DefaultTreeModel)jt_archivos.getModel();
-         DefaultMutableTreeNode root = (DefaultMutableTreeNode)m.getRoot();
-         DefaultTableModel tabla = (DefaultTableModel) jtable_productos.getModel();
-         AdmProducto am = new AdmProducto(nom_archivo+".txt");
-         
+    public void LoadFile(File x){    
+        AdmProducto am = new AdmProducto(x.getName());
+            if (am.archivo.exists()) {
+                am.cargarArchivo();
+                DefaultTableModel m = (DefaultTableModel)jtable_productos.getModel();
+                m.setRowCount(0);
+                for (Producto p : am.getProductos()) {
+                    Object[]row = {p.getId(),
+                        p.getNombre(),
+                        p.getCategory(),
+                        p.getPrecio(),
+                        p.getAisle(),
+                        p.getBin()};                   
+                m.addRow(row);
+                }
+                
+                jtable_productos.setModel(m);
+        }else{
+             JOptionPane.showMessageDialog(this, "El archivo no existe!");   
+            }
+    }
+    public void crearArchivo(String nom_archivo) throws IOException{
+        DefaultTableModel m = (DefaultTableModel) jtable_productos.getModel();
+        File arc = null;
+        
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            arc = new File(nom_archivo+".txt");
+            fw = new FileWriter(arc);
+            bw = new BufferedWriter(fw);
+            for (int i = 0; i < 10; i++) {
+                if(m.getValueAt(i, 0)== null||m.getValueAt(i, 1)== null||m.getValueAt(i, 2)== null||m.getValueAt(i, 3)== null||m.getValueAt(i, 4)== null||m.getValueAt(i, 5)== null){
+                    continue;
+                }else{
+                    bw.write(m.getValueAt(i, 0)+",");
+                    bw.write(m.getValueAt(i, 1)+",");
+                    bw.write(m.getValueAt(i, 2)+",");
+                    bw.write(m.getValueAt(i, 3)+",");
+                    bw.write(m.getValueAt(i, 4)+",");
+                    bw.write(m.getValueAt(i, 5)+",");
+                }
+                bw.flush();
+            }
+            
+        } catch (Exception e) {
+        }
+        bw.close();
+        fw.close();
+        JOptionPane.showMessageDialog(this, "Se ha creado el archivo!");
     }
     /**
      * @param args the command line arguments
