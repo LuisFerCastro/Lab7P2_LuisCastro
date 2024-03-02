@@ -76,6 +76,11 @@ public class ProductoGUI extends javax.swing.JFrame {
         pp_archivos.add(jmi_LoadF);
 
         jmiPP_refresh.setText("Refresh Tree");
+        jmiPP_refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiPP_refreshActionPerformed(evt);
+            }
+        });
         pp_archivos.add(jmiPP_refresh);
 
         jmipp_clear.setText("Clear Table");
@@ -176,6 +181,11 @@ public class ProductoGUI extends javax.swing.JFrame {
         m_window.add(m_clear);
 
         jmi_refreshTree.setText("Refresh Tree");
+        jmi_refreshTree.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_refreshTreeActionPerformed(evt);
+            }
+        });
         m_window.add(jmi_refreshTree);
 
         jMenuBar1.add(m_window);
@@ -276,7 +286,7 @@ public class ProductoGUI extends javax.swing.JFrame {
             jtable_productos.setModel(m);
             
         }else if(comando.equals("./refresh")){
-            
+            refresh();
         }else{
             JOptionPane.showMessageDialog(this, "Comando invalido!");
         }
@@ -357,7 +367,7 @@ public class ProductoGUI extends javax.swing.JFrame {
 
     private void jmi_ImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_ImportFileActionPerformed
         // TODO add your handling code here:
-        JFileChooser jfc = new JFileChooser("./");
+        JFileChooser jfc = new JFileChooser("./creados");
         File seleccionado = null;
         int seleccion = jfc.showOpenDialog(this);
         if (seleccion == JFileChooser.APPROVE_OPTION)
@@ -385,6 +395,16 @@ public class ProductoGUI extends javax.swing.JFrame {
                 + "./clear -- limpia la tabla.\n"
                 + "./refresh -- se refresca el arbol, mostrando archivos nuevos.");
     }//GEN-LAST:event_jmi_CommandsActionPerformed
+
+    private void jmiPP_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPP_refreshActionPerformed
+        // TODO add your handling code here:
+        refresh();
+    }//GEN-LAST:event_jmiPP_refreshActionPerformed
+
+    private void jmi_refreshTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_refreshTreeActionPerformed
+        // TODO add your handling code here:
+        refresh();
+    }//GEN-LAST:event_jmi_refreshTreeActionPerformed
     
    
     public String obtenerNombreArchivo(String comando, String nom_archivo){
@@ -399,7 +419,7 @@ public class ProductoGUI extends javax.swing.JFrame {
     
     
     public void Load(String nom_archivo){
-        AdmProducto am = new AdmProducto(nom_archivo+".txt");
+        AdmProducto am = new AdmProducto("./creados/"+nom_archivo+".txt");
             if (am.archivo.exists()) {
                 am.cargarArchivo();
                 DefaultTableModel m = (DefaultTableModel)jtable_productos.getModel();
@@ -420,7 +440,7 @@ public class ProductoGUI extends javax.swing.JFrame {
             }
     }
     public void LoadFile(File x){    
-        AdmProducto am = new AdmProducto(x.getName());
+        AdmProducto am = new AdmProducto("./creados/"+x.getName());
             if (am.archivo.exists()) {
                 am.cargarArchivo();
                 DefaultTableModel m = (DefaultTableModel)jtable_productos.getModel();
@@ -479,6 +499,8 @@ public class ProductoGUI extends javax.swing.JFrame {
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode)m.getRoot();
         File f = new File("./creados");
         listarArbol(f, raiz);
+        m.reload();
+        jt_archivos.setModel(m);
     }
     
     public void listarArbol(File f, DefaultMutableTreeNode m){

@@ -20,6 +20,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Refresh Tree"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiPP_refreshActionPerformed"/>
+          </Events>
         </MenuItem>
       </SubComponents>
     </Container>
@@ -96,6 +99,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Refresh Tree"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmi_refreshTreeActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
