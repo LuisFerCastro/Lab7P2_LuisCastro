@@ -108,11 +108,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Product Structure"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmi_ProductSActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jmi_Commands">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Commands"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmi_CommandsActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

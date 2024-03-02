@@ -31,6 +31,7 @@ public class ProductoGUI extends javax.swing.JFrame {
      */
     public ProductoGUI() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -182,9 +183,19 @@ public class ProductoGUI extends javax.swing.JFrame {
         m_help.setText("Help");
 
         jmi_ProductS.setText("Product Structure");
+        jmi_ProductS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_ProductSActionPerformed(evt);
+            }
+        });
         m_help.add(jmi_ProductS);
 
         jmi_Commands.setText("Commands");
+        jmi_Commands.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_CommandsActionPerformed(evt);
+            }
+        });
         m_help.add(jmi_Commands);
 
         jMenuBar1.add(m_help);
@@ -331,8 +342,13 @@ public class ProductoGUI extends javax.swing.JFrame {
             
         } catch (Exception e) {
         }
-        bw.close();
-        fw.close();
+        try {
+            bw.close();
+            fw.close();
+        } catch (IOException ex) {
+            
+        }
+  
         JOptionPane.showMessageDialog(this, "Se ha creado el archivo!");
         m.setRowCount(0);
         m.setRowCount(15);
@@ -352,6 +368,19 @@ public class ProductoGUI extends javax.swing.JFrame {
 
         LoadFile(seleccionado);
     }//GEN-LAST:event_jmi_ImportFileActionPerformed
+
+    private void jmi_ProductSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_ProductSActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Los productos tienen la siguiente estructura:\n"
+                + "Id, es el id del producto que consiste en numeros.\n El nombre, el nombre de producto.\n La categoria, que debe tener valores de 0 a 9.\n"
+                + "El precio, el precio del producto en doubles.\n La aisle, el numero del pasillo en donde esta el producto, consiste de 3 numeros enteros.\n"
+                + "El Bin, que es el lugar exacto donde se guardan los productos y consiste de 3 numeros enteros.");
+    }//GEN-LAST:event_jmi_ProductSActionPerformed
+
+    private void jmi_CommandsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_CommandsActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jmi_CommandsActionPerformed
     
    
     public String obtenerNombreArchivo(String comando, String nom_archivo){
