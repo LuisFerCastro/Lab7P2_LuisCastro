@@ -379,7 +379,11 @@ public class ProductoGUI extends javax.swing.JFrame {
 
     private void jmi_CommandsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_CommandsActionPerformed
         // TODO add your handling code here:
-        
+        JOptionPane.showMessageDialog(this, "Los comandos son los siguientes:\n"
+                + "./load -- carga el archivo deseado a la tabla.\n"
+                + "./create -- crea un nuevo archivo con la informacion en la tabla.\n"
+                + "./clear -- limpia la tabla.\n"
+                + "./refresh -- se refresca el arbol, mostrando archivos nuevos.");
     }//GEN-LAST:event_jmi_CommandsActionPerformed
     
    
