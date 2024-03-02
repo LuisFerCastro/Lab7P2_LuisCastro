@@ -473,6 +473,28 @@ public class ProductoGUI extends javax.swing.JFrame {
         m.setRowCount(15);
         jtable_productos.setModel(m);
     }
+    
+    public void refresh(){
+        DefaultTreeModel m = (DefaultTreeModel)jt_archivos.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode)m.getRoot();
+        File f = new File("./creados");
+        listarArbol(f, raiz);
+    }
+    
+    public void listarArbol(File f, DefaultMutableTreeNode m){
+         try{
+        for(File temp: f.listFiles()){
+            if( temp.isFile() ){                
+                DefaultMutableTreeNode n=new DefaultMutableTreeNode(
+                        temp.getName());
+                m.add(n);      
+            }
+            
+        } 
+    }
+    catch(Exception e){        
+    }
+    }
     /**
      * @param args the command line arguments
      */
