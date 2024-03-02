@@ -497,6 +497,7 @@ public class ProductoGUI extends javax.swing.JFrame {
     public void refresh(){
         DefaultTreeModel m = (DefaultTreeModel)jt_archivos.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode)m.getRoot();
+        raiz.removeAllChildren();
         File f = new File("./creados");
         listarArbol(f, raiz);
         m.reload();
