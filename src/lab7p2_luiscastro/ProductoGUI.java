@@ -124,15 +124,7 @@ public class ProductoGUI extends javax.swing.JFrame {
             new String [] {
                 "Id", "Name", "Categoria", "Price", "Aisle", "Bin"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        ));
         jtable_productos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtable_productosMouseClicked(evt);
@@ -151,6 +143,11 @@ public class ProductoGUI extends javax.swing.JFrame {
         m_file.add(jmi_newFile);
 
         jmi_ImportFile.setText("Import File");
+        jmi_ImportFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmi_ImportFileActionPerformed(evt);
+            }
+        });
         m_file.add(jmi_ImportFile);
 
         jMenuBar1.add(m_file);
@@ -306,6 +303,44 @@ public class ProductoGUI extends javax.swing.JFrame {
 
     private void jmi_newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_newFileActionPerformed
         // TODO add your handling code here:
+        String comando = tf_commands.getText();
+        String nom_archivo = "";
+        nom_archivo = obtenerNombreArchivo(comando, nom_archivo);
+        DefaultTableModel m = (DefaultTableModel) jtable_productos.getModel();
+        File arc = null;
+        
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            arc = new File("./creados/"+nom_archivo+".txt");
+            fw = new FileWriter(arc);
+            bw = new BufferedWriter(fw);
+            for (int i = 0; i < 10; i++) {
+                if(m.getValueAt(i, 0)== null||m.getValueAt(i, 1)== null||m.getValueAt(i, 2)== null||m.getValueAt(i, 3)== null||m.getValueAt(i, 4)== null||m.getValueAt(i, 5)== null){
+                    continue;
+                }else{
+                    bw.write(m.getValueAt(i, 0)+",");
+                    bw.write(m.getValueAt(i, 1)+",");
+                    bw.write(m.getValueAt(i, 2)+",");
+                    bw.write(m.getValueAt(i, 3)+",");
+                    bw.write(m.getValueAt(i, 4)+",");
+                    bw.write(m.getValueAt(i, 5)+",");
+                }
+                bw.flush();
+            }
+            
+        } catch (Exception e) {
+        }
+        bw.close();
+        fw.close();
+        JOptionPane.showMessageDialog(this, "Se ha creado el archivo!");
+        m.setRowCount(0);
+        m.setRowCount(15);
+        jtable_productos.setModel(m);
+    }//GEN-LAST:event_jmi_newFileActionPerformed
+
+    private void jmi_ImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmi_ImportFileActionPerformed
+        // TODO add your handling code here:
         JFileChooser jfc = new JFileChooser("./");
         File seleccionado = null;
         int seleccion = jfc.showOpenDialog(this);
@@ -316,7 +351,7 @@ public class ProductoGUI extends javax.swing.JFrame {
             }
 
         LoadFile(seleccionado);
-    }//GEN-LAST:event_jmi_newFileActionPerformed
+    }//GEN-LAST:event_jmi_ImportFileActionPerformed
     
    
     public String obtenerNombreArchivo(String comando, String nom_archivo){
@@ -379,7 +414,7 @@ public class ProductoGUI extends javax.swing.JFrame {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            arc = new File(nom_archivo+".txt");
+            arc = new File("./creados/"+nom_archivo+".txt");
             fw = new FileWriter(arc);
             bw = new BufferedWriter(fw);
             for (int i = 0; i < 10; i++) {
@@ -401,6 +436,9 @@ public class ProductoGUI extends javax.swing.JFrame {
         bw.close();
         fw.close();
         JOptionPane.showMessageDialog(this, "Se ha creado el archivo!");
+        m.setRowCount(0);
+        m.setRowCount(15);
+        jtable_productos.setModel(m);
     }
     /**
      * @param args the command line arguments
